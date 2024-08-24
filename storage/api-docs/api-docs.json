@@ -1,0 +1,213 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Test API",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/api",
+            "description": "local"
+        }
+    ],
+    "paths": {
+        "/rewards": {
+            "put": {
+                "tags": [
+                    "Rewards"
+                ],
+                "summary": "update reward",
+                "operationId": "updateReward",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RewardUpdateDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "404": {
+                        "description": "Reward not found"
+                    },
+                    "409": {
+                        "description": "Reward already exists"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Rewards"
+                ],
+                "summary": "store reward",
+                "operationId": "storeReward",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RewardStoreDTO"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "409": {
+                        "description": "Reward already exists"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/rewards/{rewardId}/{userId}": {
+            "patch": {
+                "tags": [
+                    "Rewards"
+                ],
+                "summary": "attach reward",
+                "operationId": "attachReward",
+                "parameters": [
+                    {
+                        "name": "rewardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "user or reward not found"
+                    },
+                    "409": {
+                        "description": "reward already attached to this user"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/rewards/{rewardId}": {
+            "get": {
+                "tags": [
+                    "Rewards"
+                ],
+                "summary": "Get reward by id",
+                "operationId": "rewardById",
+                "parameters": [
+                    {
+                        "name": "rewardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "reward not found"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RewardSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Rewards"
+                ],
+                "summary": "delete reward",
+                "operationId": "deleteReward",
+                "parameters": [
+                    {
+                        "name": "rewardId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "reward not found"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "RewardStoreDTO": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "points": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                },
+                "type": "object"
+            },
+            "RewardUpdateDTO": {
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "points": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                },
+                "type": "object"
+            },
+            "RewardSchema": {
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "points": {
+                        "type": "number",
+                        "format": "float"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Rewards",
+            "description": "Rewards"
+        }
+    ]
+}
