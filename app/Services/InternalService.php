@@ -10,14 +10,19 @@ use Symfony\Component\HttpFoundation\Response as Response;
 abstract class InternalService
 {
     use Tokenable;
+    private string $service;
+    public function __construct()
+    {
+        $this->service = 'main';
+    }
 
     protected function auth(): void
     {
-        $response = Http::post(config('services.main.url') . '/oauth/token', [
+        $response = Http::post(config('services.'.$this->service.'.url') . '/oauth/token', [
             'grant_type' => 'client_credentials',
-            'client_id' => config('services.main.client_id'),
+            'client_id' => config('services.'.$this->service.'.client_id'),
             'scope' => '*',
-            'client_secret' => config('services.main.client_secret'),
+            'client_secret' => config('services.'.$this->service.'.client_secret'),
         ]);
 
         if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
@@ -35,7 +40,7 @@ abstract class InternalService
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . self::getToken(),
-        ])->{$method->value}(config('services.main.url') . $url, $data);
+        ])->{$method->value}(config('services.'.$this->service.'.url') . $url, $data);
 
         if($response->getStatusCode() === Response::HTTP_UNAUTHORIZED) {
             if(!$refreshToken) {
@@ -49,6 +54,11 @@ abstract class InternalService
         }
 
         return json_decode($response->getBody()->getContents(), true) ?? [];
+    }
+
+    public function setService(string $service): void
+    {
+        $this->service = $service;
     }
 
 }
