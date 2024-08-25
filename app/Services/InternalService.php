@@ -24,7 +24,6 @@ abstract class InternalService
             'scope' => '*',
             'client_secret' => config('services.'.$this->service.'.client_secret'),
         ]);
-
         if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
             throw new \InvalidArgumentException($response->getBody(), $response->getStatusCode());
         }
