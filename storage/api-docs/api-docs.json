@@ -1,12 +1,12 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Test API",
+        "title": "Rewards API",
         "version": "1.0.0"
     },
     "servers": [
         {
-            "url": "http://127.0.0.1:8000/api",
+            "url": "http://192.168.49.2:30008/api",
             "description": "local"
         }
     ],
@@ -156,6 +156,43 @@
                 "responses": {
                     "404": {
                         "description": "reward not found"
+                    },
+                    "204": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/rewards/{slug}": {
+            "get": {
+                "tags": [
+                    "Rewards"
+                ],
+                "summary": "Get reward by slug",
+                "operationId": "rewardBySlug",
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "reward not found"
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RewardSchema"
+                                }
+                            }
+                        }
                     }
                 }
             }
