@@ -11,13 +11,13 @@ Note! before install this project, install <a href="https://github.com/mush0707/
 
 ``change MAIN_API_CLIENT and MAIN_API_SECRET in .env``
 
-``docker build . -f docker/nginx.Dockerfile -t frontend:dev-5``
+``docker build . -f docker/nginx.Dockerfile -t frontend:88``
 
-``docker build . -f docker/fpm.Dockerfile -t backend:dev-5``
+``docker build . -f docker/fpm.Dockerfile -t backend:88``
 
-``minikube image load backend:dev-5``
+``minikube image load backend:88``
 
-``minikube image load frontend:dev-5``
+``minikube image load frontend:88``
 
 ``kubectl apply -f ./k8s/``
 
