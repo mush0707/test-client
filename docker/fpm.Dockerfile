@@ -18,36 +18,24 @@ RUN docker-php-source extract \
 RUN docker-php-ext-enable apcu
 
 FROM base AS dev
-USER www-data
-
-COPY /composer.json composer.json
-COPY /composer.lock composer.lock
-COPY /app app
-COPY /bootstrap bootstrap
-COPY /config config
-COPY /artisan artisan
+USER 1001:1001
 
 FROM base AS build-fpm
 
 WORKDIR /var/www/html
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
-COPY /artisan artisan
 COPY . /var/www/html
 # COPY /composer.json composer.json
 
 RUN composer install --prefer-dist --no-ansi --no-autoloader
 
-COPY /bootstrap bootstrap
-COPY /app app
-COPY /config config
-COPY /routes routes
-
 
 # COPY . /var/www/html
 
 RUN composer dump-autoload -o
-
+RUN mkdir -p /var/www/html/storage/app/main_service
+RUN chown 1001:1001 /var/www/html/storage/app/main_service
 FROM build-fpm AS fpm
 
 COPY --from=build-fpm /var/www/html /var/www/html
